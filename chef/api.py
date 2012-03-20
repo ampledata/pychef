@@ -59,7 +59,7 @@ class ChefAPI(object):
 
     ruby_value_re = re.compile(r'#\{([^}]+)\}')
 
-    def __init__(self, url, key, client, version='0.9.12'):
+    def __init__(self, url, key, client, version='0.10.4'):
         self.url = url.rstrip('/')
         self.parsed_url = urlparse.urlparse(self.url)
         if not isinstance(key, Key):
@@ -222,3 +222,8 @@ def autoconfigure(base_path=None, config_file=None):
     api = ChefAPI.from_config_file(config_path)
     if api is not None:
         return api
+
+def is_version_compatible(min_version, api=None):
+    if api is None: api = ChefAPI.get_global()
+    if type(min_version) == str: min_version = map(int, min_version.split("."))
+    return map(int, api.version.split(".")) >= min_version

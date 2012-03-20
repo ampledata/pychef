@@ -1,7 +1,7 @@
 import collections
 
-from chef.api import ChefAPI
-from chef.exceptions import ChefServerNotFoundError
+from chef.api import ChefAPI, is_version_compatible
+from chef.exceptions import *
 
 class ChefQuery(collections.Mapping):
     def __init__(self, obj_class, names, api):
@@ -40,9 +40,15 @@ class ChefObject(object):
     url = ''
     attributes = {}
 
+    api_version = "0.9"
+
     def __init__(self, name, api=None, skip_load=False):
         self.name = name
         self.api = api or ChefAPI.get_global()
+
+        if not is_version_compatible(self.api_version, self.api):
+            raise ChefApiVersionError, "Class %s is not compatible with API version %s" % (self.__class__.__name__, self.api.version)
+
         self.url = self.__class__.url + '/' + self.name
         self.exists = False
         data = {}
