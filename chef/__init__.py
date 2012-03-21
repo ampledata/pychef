@@ -1,7 +1,7 @@
 # Copyright (c) 2010 Noah Kantrowitz <noah@coderanger.net>
 
-__version_info__ = ('0', '2', '1')
-__version__ = '.'.join(__version_info__)
+__version_info__ = (0, 2, 1)
+__version__ = '.'.join([str(x) for x in a])
 
 from chef.api import ChefAPI, autoconfigure
 from chef.client import Client
